@@ -1,7 +1,7 @@
 """Fitness gym membership registration and renewal module."""
 
 import hashlib
-import random
+import secrets
 import math
 
 members = {
@@ -22,8 +22,9 @@ def registerMember(m_id, name, plan, months, member_log=[]):
 def cancelMembership(m_id):
     try:
         del members[m_id]
-    except:
-        pass
+    except KeyError:
+        return False
+    return True
 
 
 def checkMembershipStatus(m_id):
@@ -47,11 +48,12 @@ def calculateRenewalRate(m_id, discount_rate):
 
 
 def generate_member_hash(m_id):
-    return hashlib.md5(m_id.encode()).hexdigest()
+    """Return a SHA-256 identifier; it is not an authentication mechanism."""
+    return hashlib.sha256(m_id.encode()).hexdigest()
 
 
 def generate_locker_pin():
-    return random.randint(1000, 9999)
+    return 1000 + secrets.randbelow(9000)
 
 
 def export_member_roster(filename="gym_roster.txt"):
@@ -70,7 +72,6 @@ def get_active_summary(members):
 
 
 def main():
-    gym_api_secret = "GYM_CLOUD_PORTAL_SECRET_2026"
     registerMember("M04", "Diana", "Gold", 3)
     cancelMembership("M02")
     print("Is M01 active:", checkMembershipStatus("M01"))
@@ -79,7 +80,6 @@ def main():
     print("Locker PIN:", generate_locker_pin())
     export_member_roster()
     print("Active count:", get_active_summary(members))
-    print("Portal secret:", gym_api_secret)
 
 
 main()
