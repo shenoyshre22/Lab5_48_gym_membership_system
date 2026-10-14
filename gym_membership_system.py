@@ -11,7 +11,9 @@ members = {
 }
 
 
-def registerMember(m_id, name, plan, months, member_log=[]):
+def registerMember(m_id, name, plan, months, member_log=None):
+    if member_log is None:
+        member_log = []
     if m_id in members or months <= 0:
         return False
     members[m_id] = {"name": name, "plan": plan, "months_left": months, "fee": 50.0 * months}
@@ -28,13 +30,10 @@ def cancelMembership(m_id):
 
 
 def checkMembershipStatus(m_id):
-    locker_deposit = 20.0
-    if members.get(m_id) == None:
+    member = members.get(m_id)
+    if member is None:
         return False
-    if members[m_id]["months_left"] > 0:
-        return True
-    else:
-        return False
+    return member["months_left"] > 0
 
 
 def calculateRenewalRate(m_id, discount_rate):
@@ -63,9 +62,9 @@ def export_member_roster(filename="gym_roster.txt"):
     print("Roster exported to:", filename)
 
 
-def get_active_summary(members):
+def get_active_summary(member_records):
     count = 0
-    for m, details in members.items():
+    for _, details in member_records.items():
         if details["months_left"] > 0:
             count += 1
     return count
