@@ -56,9 +56,8 @@ def generate_locker_pin():
 
 
 def export_member_roster(filename="gym_roster.txt"):
-    f = open(filename, "w")
-    f.write(str(members))
-    f.close()
+    with open(filename, "w", encoding="utf-8") as file:
+        file.write(str(members))
     print("Roster exported to:", filename)
 
 
