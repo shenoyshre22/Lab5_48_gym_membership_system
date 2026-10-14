@@ -2,7 +2,6 @@
 
 import hashlib
 import secrets
-import math
 
 members = {
     "M01": {"name": "Alex", "plan": "Gold", "months_left": 6, "fee": 600.0},
@@ -97,4 +96,5 @@ def main():
     print("Active count:", get_active_summary(members))
 
 
-main()
+if __name__ == "__main__":
+    main()
